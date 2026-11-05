@@ -1,35 +1,19 @@
 import sys
 import typing
 
-def splitlines(text):
-    lines = []
-    current = ""
-    i = 0
-    while i < len(text):
-        ch = text[i]
-        if ch == "\r":
-            lines.append(current)
-            current = ""
-            if i + 1 < len(text) and text[i + 1] == "\n":
-                i += 1
-        elif ch == "\n":
-            lines.append(current)
-            current = ""
-        else:
-            current += ch
-        i += 1
-    if current:
-        lines.append(current)
-    return lines
 
 def edit(filename: str, content: str) -> None:
     print("Transform data:")
-    lines = splitlines(content)
+    content = content.replace("\r\n", "\n")
+    lines = content.split("\n")
+    if lines[-1] == "":
+        lines.pop()
     new_lines = [line + "#" for line in lines]
-    print("---\n")
+
+    print("---")
     for line in new_lines:
         print(line)
-    print("\n---")
+    print("---")
 
     try:
         save_as = input("Enter new file name (or empty): ").strip()
@@ -49,11 +33,14 @@ def edit(filename: str, content: str) -> None:
     except OSError as e:
         print(f"Error saving file '{save_as}': {e}")
 
+
 def recover(filename: str) -> None:
     try:
         f: typing.IO[str] = open(filename, "r")
         content = f.read()
-        print(f"---\n\n{content}\n\n---")
+        print("---\n")
+        print(content, end="" if content.endswith("\n") else "\n")
+        print("\n---")
         f.close()
         print(f"File '{filename}' closed.")
         edit(filename, content)
