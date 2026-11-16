@@ -22,8 +22,14 @@ def main():
             missing.append(name)
 
     print("\npip vs Poetry:")
-    print("requirements.txt declares what to install; pip resolves it at install time.")
-    print("pyproject.toml declares the same constraints, and Poetry pins the resolved")
+    print(
+        "requirements.txt declares what to install; "
+        "pip resolves it at install time."
+    )
+    print(
+        "pyproject.toml declares the same constraints, "
+        "and Poetry pins the resolved"
+    )
     print("versions in poetry.lock so every install is identical.")
 
     if missing:
